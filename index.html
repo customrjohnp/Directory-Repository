@@ -3,38 +3,22 @@
 <head>
   <!-- 
   =============================================================
-  EMAIL DIRECTORY — SIMPLE, SAFE-TO-EDIT INDEX (for non-coders)
+  EMAIL DIRECTORY — INDEX WITH OVERLAY PREVIEW (safe to edit)
   =============================================================
-  How this file works (one page, no build tools):
-  • You paste/export each email HTML into /emails/ as its own .html file.
-  • You list those files in the “EMAILS” section below (clearly labelled EDIT HERE).
-  • This page renders a searchable directory of those files.
-
-  SAFE-EDIT RULES:
-  1) Only edit inside blocks that say  >>> EDIT HERE <<<  (labels included).
-  2) Don’t delete or rename any lines outside those blocks.
-  3) When adding a new email, duplicate an example object and change texts between quotes only.
-  4) Filenames must match the actual file inside /emails/ or the button will open 404.
-  5) If you make a mistake, the page won’t break; the entry will simply be skipped and you’ll see a warning card.
-
-  FOLDERS REQUIRED IN YOUR REPO:
-  /index.html   (this file)
-  /emails/      (put your exported email .html files here)
-
-  NAMING SUGGESTION (not required but tidy):
-  Marketing_YYYYMMDD_Segment_CampaignType_CampaignName[_Category][_Variant].html
-  Auto_FlowName[_Step][_Variant].html
-  =============================================================
+  Only edit the blocks that say  >>> EDIT HERE <<< .
+  This version:
+  • Opens preview in an overlay (<iframe>) instead of a new tab
+  • Auto-adds .html if you forget it in path
+  • URL-encodes folders/files so spaces, &, (), [] work
   -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Email Directory — Customr</title>
-  <meta name="description" content="Self‑hosted directory of email HTML files for previews and sharing." />
+  <meta name="description" content="Self-hosted directory of email HTML files for previews and sharing." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ====== VISUAL STYLES (do not edit unless you want to restyle) ====== */
     :root{--bg:#0b0c0f;--panel:#111319;--muted:#a1a6b3;--text:#e9eef9;--brand:#5ad8e6;--ring:#4aa8b5;--mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -65,13 +49,23 @@
     details{margin-top:10px}
     summary{cursor:pointer;color:#c9e9ee}
     @media (max-width:900px){.toolbar{grid-template-columns:1fr 1fr 1fr;}.toolbar .hide-sm{display:none}}
+
+    /* ===== Overlay preview ===== */
+    .overlay{position:fixed;inset:0;display:none;background:rgba(0,0,0,.65);z-index:1000;}
+    .overlay.show{display:block;}
+    .ov-panel{position:absolute;inset:30px;display:flex;flex-direction:column;background:#0c0f16;border:1px solid #1c2230;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .ov-bar{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1c2230;padding:10px 12px}
+    .ov-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ov-actions{display:flex;gap:8px}
+    .ov-iframe{border:0;width:100%;height:calc(100% - 48px);background:white}
+    .close-x{background:transparent;border:1px solid #2a3a4e;border-radius:8px;color:#d6e6ee;padding:8px 10px;cursor:pointer}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div class="brand"><span class="dot" aria-hidden="true"></span><h1>Email Directory</h1></div>
-      <div class="muted">Self‑hosted previews • Shareable links</div>
+      <div class="muted">Self-hosted previews • Shareable links</div>
     </header>
 
     <section class="panel" aria-labelledby="filters-heading">
@@ -93,22 +87,34 @@
 
     <section class="footer">
       <details>
-        <summary>How to add new emails (step‑by‑step)</summary>
+        <summary>How to add new emails (step-by-step)</summary>
         <ol>
-          <li>Export your email HTML from Emarsys preview → paste it into a new file inside <code>/emails/</code>. Example: <code>Marketing_20250924_FullDB_Sale_SitewideSale.html</code></li>
-          <li>Scroll to the <strong>EMAILS DATA – EDIT HERE</strong> block in the code below. Duplicate one object and change values between quotes only.</li>
-          <li>Fields meaning: <code>id</code> = display name, <code>brand</code> = brand filter, <code>type</code> = Marketing/Automation/Transactional, <code>date</code> = YYYY-MM-DD, <code>category</code> & <code>tags</code> = free text arrays, <code>path</code> = relative path to your HTML file, <code>notes</code> = small helper text.</li>
-          <li>Commit & push. Open this index in your repo (or GitHub Pages). Done.</li>
+          <li>Export your email HTML from Emarsys preview → save into <code>/emails/</code> (or your chosen folders) with a <strong>.html</strong> extension.</li>
+          <li>In the <strong>EMAILS DATA – EDIT HERE</strong> block, duplicate an item and update values between quotes only.</li>
+          <li><code>path</code> can have spaces/&/() — the page will encode them. If you forget <code>.html</code> the page will add it for preview/copy/download.</li>
         </ol>
       </details>
     </section>
   </div>
 
+  <!-- ===== Overlay skeleton (do not edit) ===== -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="ov-panel" role="dialog" aria-modal="true" aria-labelledby="ov-title">
+      <div class="ov-bar">
+        <div id="ov-title" class="ov-title">Preview</div>
+        <div class="ov-actions">
+          <a id="ov-open" class="btn" href="#" target="_blank" rel="noopener">Open in new tab</a>
+          <a id="ov-download" class="btn ghost" href="#" download>Download HTML</a>
+          <button id="ov-close" class="close-x" aria-label="Close">Close</button>
+        </div>
+      </div>
+      <iframe id="ov-frame" class="ov-iframe" loading="lazy"></iframe>
+    </div>
+  </div>
+
   <script>
     // =============================================================
     // PRESETS — EDIT SAFELY
-    // You can add or rename brands/types here. Keep quotes and commas.
-    // If you don't want presets, leave as-is; brands also auto-populate from EMAILS.
     // =============================================================
 
     /* >>> BRANDS PRESET — EDIT HERE (optional) <<< */
@@ -122,37 +128,30 @@
 
     // =============================================================
     // EMAILS DATA — EDIT HERE
-    // Add a new block by copying one of the examples and changing values.
-    // Rules: keep quotes, commas, and the overall { } shape. Don't remove keys.
-    // If something is wrong, the entry is skipped and a warning appears.
+    // (If you forget .html at the end of path, we will add it for you.)
     // =============================================================
 
     const EMAILS = [
-      // EXAMPLE 1 — Automation (Welcome LEAD Email 1)
       {
-        id: "Auto_WelcomeSeries_Online_Lead_Email_01",   // display name
-        brand: "House",                                       // must match a brand name
-        type: "Automation",                                    // Marketing | Automation | Transactional
-        date: "2025-09-22",                                   // YYYY-MM-DD
-        category: ["Welcome Series","Online"],                    // free tags; optional but useful
-        tags: ["Automation"," Lead Email 1"],                        // free tags; optional but useful
-        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_01", // where the HTML file lives
-        notes: "Welcome Series Email 01 — intro hero, $20 off WELCOME20 (2wks), value props, dynamic recs, rewards CTA"                   // small helper text; optional
+        id: "Auto_WelcomeSeries_Online_Lead_Email_01",
+        brand: "House",
+        type: "Automation",
+        date: "2025-09-22",
+        category: ["Welcome Series","Online"],
+        tags: ["Automation","Lead Email 1"],
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_01.html",
+        notes: "Welcome Series Email 01 — intro hero, $20 off WELCOME20 (2wks), value props, dynamic recs, rewards CTA"
       },
-
-      // EXAMPLE 2 — Automation (Welcome LEAD Email 2)
       {
         id: "Auto_WelcomeSeries_Online_Lead_Email_02",
         brand: "House",
         type: "Automation",
         date: "2025-09-10",
         category: ["Welcome Series"],
-        tags: ["Automation"," Lead Email 2"],
-        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_02",
+        tags: ["Automation","Lead Email 2"],
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_02.html",
         notes: "Welcome Series Email 02 — lifestyle hero, brand highlights (Tramontina, Baccarat Le Connoisseur, Alex Liddy, Ecology, Adorn, Bambury), reminder: $20 off WELCOME20 (2wks, $80 min, online only, excl Hot Offers), USPs + shop-by-category tiles"
       },
-
-      // EXAMPLE 3 — Automation (Welcome LEAD Email 3)
       {
         id: "Auto_WelcomeSeries_Online_Lead_Email_03",
         brand: "House",
@@ -160,11 +159,9 @@
         date: "2025-09-18",
         category: ["Welcome Series"],
         tags: ["Automation","Lead Email 3"],
-        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_03",
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_03.html",
         notes: "Story tile + editorial section"
       },
-
-      // EXAMPLE 4 — Automation (Welcome CUSTOMER Email 1)
       {
         id: "Auto_WelcomeSeries_Online_Customer_Email_01",
         brand: "House",
@@ -179,7 +176,6 @@
 
     // =============================================================
     // BELOW THIS LINE — LOGIC (DO NOT EDIT)
-    // Renders cards, handles filters, sorts, and basic validation.
     // =============================================================
 
     const grid = document.getElementById('grid');
@@ -188,15 +184,36 @@
     const typeSel = document.getElementById('type');
     const sortSel = document.getElementById('sort');
 
-    // Build brand options: presets + detected from EMAILS
+    const overlay = document.getElementById('overlay');
+    const ovTitle = document.getElementById('ov-title');
+    const ovFrame = document.getElementById('ov-frame');
+    const ovOpen  = document.getElementById('ov-open');
+    const ovDown  = document.getElementById('ov-download');
+    const ovClose = document.getElementById('ov-close');
+
+    // Build brand/type options
     const detectedBrands = Array.from(new Set(EMAILS.map(e=>e.brand).filter(Boolean)));
     const brands = Array.from(new Set([...(BRANDS_PRESET||[]), ...detectedBrands])).sort();
     brands.forEach(b=>{ const o=document.createElement('option'); o.textContent=b; o.value=b; brandSelect.appendChild(o); });
 
-    // Build type options: presets or fallback
     const detectedTypes = Array.from(new Set(EMAILS.map(e=>e.type).filter(Boolean)));
     const types = Array.from(new Set([...(TYPES_PRESET||["Marketing","Automation","Transactional"]), ...detectedTypes])).sort();
     types.forEach(t=>{ const o=document.createElement('option'); o.textContent=t; o.value=t; typeSel.appendChild(o); });
+
+    // Helper: base path for this page (e.g., "/Directory-Repository/")
+    const basePath = location.pathname.replace(/index\.html?$/,'');
+    // Build a safe href: ensures .html and encodes each segment
+    function buildHref(rawPath){
+      let p = (rawPath||'').trim();
+      if(!p) return '';
+      // optional path normalizer if you prefer lowercase "emails/":
+      // p = p.replace(/^Emails\//,'emails/');
+      if(!/\.[a-z0-9]+$/i.test(p)) p += '.html'; // add extension if missing
+      // encode each path segment so spaces/&/() etc. are safe
+      p = p.split('/').map(seg => encodeURIComponent(seg)).join('/');
+      // return relative path so it works on GitHub Pages
+      return basePath + p;
+    }
 
     function formatDate(iso){
       if(!iso) return "";
@@ -209,7 +226,6 @@
     }
 
     function validate(entry){
-      // Minimal checks; if something is wrong we return a message and skip rendering as normal.
       const errors = [];
       if(!entry || typeof entry!== 'object') errors.push('Entry is not an object');
       if(!entry.id) errors.push('Missing id');
@@ -227,6 +243,25 @@
       return card;
     }
 
+    function openOverlay(title, href){
+      ovTitle.textContent = title;
+      ovFrame.src = href;
+      ovOpen.href = href;
+      ovDown.href = href;
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+    }
+
+    function closeOverlay(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+      ovFrame.removeAttribute('src'); // stop loading
+    }
+
+    ovClose.addEventListener('click', closeOverlay);
+    overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeOverlay(); });
+
     function render(){
       const query = (q.value||'').trim().toLowerCase();
       const brand = brandSelect.value;
@@ -234,7 +269,7 @@
       const sort = sortSel.value;
 
       let rows = EMAILS.slice();
-      // Filter invalid items gracefully
+
       const validated = [];
       rows.forEach((e,i)=>{
         const errs = validate(e);
@@ -260,16 +295,18 @@
       if(rows.length===0){
         const empty = document.createElement('div');
         empty.className='card';
-        empty.innerHTML = '<div class="muted">No emails match your filters yet. Add items to the EMAILS block (look for \u00bb EMAILS DATA — EDIT HERE \u00ab).</div>';
+        empty.innerHTML = '<div class="muted">No emails match your filters yet. Add items to the EMAILS block (look for » EMAILS DATA — EDIT HERE «).</div>';
         grid.appendChild(empty);
         return;
       }
 
-      rows.forEach(e=>{
+      rows.forEach((e, idx)=>{
         const card = document.createElement('article');
         card.className='card';
         const safeId = (e.id||'').replaceAll('_',' ');
-        const safePath = e.path;
+        const rawPath = e.path;
+        const href = buildHref(rawPath);
+
         card.innerHTML = `
           <div class="row">
             <div style="font-weight:700">${safeId}</div>
@@ -281,14 +318,25 @@
             ${ (e.category||[]).map(c=>`<span class="badge">${c}</span>`).join('') }
             ${ (e.tags||[]).map(t=>`<span class="badge">#${t}</span>`).join('') }
           </div>
-          <div class="code">${safePath}</div>
+          <div class="code">${rawPath}</div>
           <div class="actions">
-            <a class="btn primary" href="${safePath}" target="_blank" rel="noopener">View</a>
-            <button class="btn" onclick="copyToClipboard(location.origin + location.pathname.replace(/index\\.html?$/,'') + '${safePath}')">Copy link</button>
-            <a class="btn ghost" href="${safePath}" download>Download HTML</a>
+            <button class="btn primary view-btn">View</button>
+            <button class="btn copy-btn">Copy link</button>
+            <a class="btn ghost dl-btn" href="${href}" download>Download HTML</a>
           </div>
           ${ e.notes ? `<div class="muted" style="font-size:12px">${e.notes}</div>` : '' }
         `;
+
+        // Wire actions
+        card.querySelector('.view-btn').addEventListener('click', ()=>{
+          if(!href){ alert('Invalid path'); return; }
+          openOverlay(safeId, href);
+        });
+        card.querySelector('.copy-btn').addEventListener('click', ()=>{
+          if(!href){ alert('Invalid path'); return; }
+          copyToClipboard(location.origin + href);
+        });
+
         grid.appendChild(card);
       });
     }
