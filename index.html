@@ -128,52 +128,52 @@
     // =============================================================
 
     const EMAILS = [
-      // EXAMPLE 1 — Marketing
+      // EXAMPLE 1 — Automation (Welcome LEAD Email 1)
       {
-        id: "Marketing_20250922_FullDB_Sale_SitewideSale",   // display name
+        id: "Auto_WelcomeSeries_Online_Lead_Email_01",   // display name
         brand: "House",                                       // must match a brand name
-        type: "Marketing",                                    // Marketing | Automation | Transactional
+        type: "Automation",                                    // Marketing | Automation | Transactional
         date: "2025-09-22",                                   // YYYY-MM-DD
-        category: ["Sale","Kitchenware"],                    // free tags; optional but useful
-        tags: ["FullDB","Sitewide"],                        // free tags; optional but useful
-        path: "emails/Marketing_20250922_FullDB_Sale_SitewideSale.html", // where the HTML file lives
-        notes: "HDR banner + 3x promo tiles"                   // small helper text; optional
+        category: ["Welcome Series","Online"],                    // free tags; optional but useful
+        tags: ["Automation"," Lead Email 1"],                        // free tags; optional but useful
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_01", // where the HTML file lives
+        notes: "Welcome Series Email 01 — intro hero, $20 off WELCOME20 (2wks), value props, dynamic recs, rewards CTA"                   // small helper text; optional
       },
 
-      // EXAMPLE 2 — Automation (Abandon Cart)
+      // EXAMPLE 2 — Automation (Welcome LEAD Email 2)
       {
-        id: "Auto_AbandonCart_VariantA",
-        brand: "Bessemer",
+        id: "Auto_WelcomeSeries_Online_Lead_Email_02",
+        brand: "House",
         type: "Automation",
         date: "2025-09-10",
-        category: ["AbandonCart"],
-        tags: ["Flow","VariantA","Reminder1"],
-        path: "emails/Auto_AbandonCart_VariantA.html",
-        notes: "Dynamic product block via Scarab"
+        category: ["Welcome Series"],
+        tags: ["Automation"," Lead Email 2"],
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_02",
+        notes: "Welcome Series Email 02 — lifestyle hero, brand highlights (Tramontina, Baccarat Le Connoisseur, Alex Liddy, Ecology, Adorn, Bambury), reminder: $20 off WELCOME20 (2wks, $80 min, online only, excl Hot Offers), USPs + shop-by-category tiles"
       },
 
-      // EXAMPLE 3 — Marketing (New Arrivals)
+      // EXAMPLE 3 — Automation (Welcome LEAD Email 3)
       {
-        id: "Marketing_20250918_Engaged_BAU_NewArrivals",
-        brand: "Viktoria & Woods",
-        type: "Marketing",
+        id: "Auto_WelcomeSeries_Online_Lead_Email_03",
+        brand: "House",
+        type: "Automation",
         date: "2025-09-18",
-        category: ["New Arrivals","Apparel"],
-        tags: ["Engaged","Womenswear"],
-        path: "emails/Marketing_20250918_Engaged_BAU_NewArrivals.html",
+        category: ["Welcome Series"],
+        tags: ["Automation","Lead Email 3"],
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Lead_Email_03",
         notes: "Story tile + editorial section"
       },
 
-      // EXAMPLE 4 — Automation (Welcome)
+      // EXAMPLE 4 — Automation (Welcome CUSTOMER Email 1)
       {
-        id: "Auto_Welcome_Email1",
-        brand: "Therapy Shoes",
+        id: "Auto_WelcomeSeries_Online_Customer_Email_01",
+        brand: "House",
         type: "Automation",
         date: "2025-08-30",
-        category: ["Welcome"],
-        tags: ["Step1","Voucher"],
-        path: "emails/Auto_Welcome_Email1.html",
-        notes: "Voucher block, predictive recs"
+        category: ["Welcome Series"],
+        tags: ["Automation","Customer Email 1"],
+        path: "Emails/GRB/House/[FUTURE STATE] Welcome Series (Online & In Store)/Auto_WelcomeSeries_Online_Customer_Email_01",
+        notes: "Welcome Series (Customer) Email 01 — post-purchase welcome, hero + thank you copy, “Discover more to love” CTA, USPs (30-day returns, free ship $130+, 100+ stores), ‘Why shop with House?’ tiles, dynamic ‘You may also like’ (Predict x3), VIP Rewards banner, Top Brands, Shop-by-Category"
       }
     ];
 
