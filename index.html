@@ -85,17 +85,28 @@
       <div id="grid" class="grid" aria-live="polite"></div>
     </section>
 
-    <section class="footer">
-      <details>
-        <summary>How to add new emails (step-by-step)</summary>
-        <ol>
-          <li>Export your email HTML from Emarsys preview → save into <code>/emails/</code> (or your chosen folders) with a <strong>.html</strong> extension.</li>
-          <li>In the <strong>EMAILS DATA – EDIT HERE</strong> block, duplicate an item and update values between quotes only.</li>
-          <li><code>path</code> can have spaces/&/() — the page will encode them. If you forget <code>.html</code> the page will add it for preview/copy/download.</li>
-        </ol>
-      </details>
-    </section>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="dot" aria-hidden="true"></span>
+      WeAreCustomr
+    </div>
+
+    <nav class="footer-nav" aria-label="WeAreCustomr links">
+      <a href="https://www.wearecustomr.com.au/" target="_blank" rel="noopener">Website</a>
+      <a href="https://www.wearecustomr.com.au/data-insights" target="_blank" rel="noopener">Data & Insights</a>
+      <a href="https://www.wearecustomr.com.au/crm" target="_blank" rel="noopener">CRM</a>
+      <a href="https://www.wearecustomr.com.au/loyalty" target="_blank" rel="noopener">Loyalty</a>
+      <a href="https://www.wearecustomr.com.au/technology" target="_blank" rel="noopener">Technology</a>
+    </nav>
+
+    <div class="footer-legal">
+      © <span id="year"></span> WeAreCustomr. All rights reserved.
+    </div>
   </div>
+</footer>
+
 
   <!-- ===== Overlay skeleton (do not edit) ===== -->
   <div id="overlay" class="overlay" aria-hidden="true">
@@ -119,7 +130,7 @@
 
     /* >>> BRANDS PRESET — EDIT HERE (optional) <<< */
     const BRANDS_PRESET = [
-      "House", "MyHouse", "Robin's Kitchen", "Bessemer", "Gazman",
+      "House", "MyHouse", "Robin's Kitchen", "Bessemer", "Baccarat",
       "Perri Cutten", "Viktoria & Woods", "Therapy Shoes", "Cable Melbourne"
     ];
 
