@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Directory — Customr</title>
+  <meta name="description" content="Self‑hosted directory of email HTML files for live previews and sharing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0c0f;/* near‑black */
+      --panel:#111319;/* card */
+      --muted:#a1a6b3;
+      --text:#e9eef9;
+      --brand:#5ad8e6;/* Customr aqua */
+      --ring:#4aa8b5;
+      --ok:#2ecc71;
+      --warn:#ffb020;
+      --bad:#ff5c5c;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0e1016 40%, #0b0c0f);color:var(--text)}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:700}
+    .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px #2a3d43}
+    h1{font-size:clamp(22px,3vw,30px);margin:0}
+    .muted{color:var(--muted)}
+    .panel{background:var(--panel);border:1px solid #1c2230;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .toolbar{display:grid;grid-template-columns:1fr 150px 150px 150px;gap:10px;padding:14px}
+    .field{position:relative}
+    input[type="search"],select{width:100%;background:#0c0f16;border:1px solid #20293c;color:var(--text);padding:12px 14px;border-radius:10px;outline:none}
+    input[type="search"]:focus,select:focus{border-color:var(--ring);box-shadow:0 0 0 3px rgba(90,216,230,.15)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:14px}
+    .card{background:#0d1119;border:1px solid #1b2233;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid #263146;color:#bcd5dd;background:#0b141a;font-size:12px}
+    .meta{display:flex;flex-wrap:wrap;gap:6px}
+    .row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .code{font-family:var(--mono);font-size:12px;color:#cfeaf0;background:#0a1016;border:1px dashed #203041;border-radius:8px;padding:8px;overflow:auto}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{appearance:none;border:none;border-radius:10px;padding:10px 12px;font-weight:600;cursor:pointer;background:#0f1824;color:#d6e6ee;border:1px solid #243244}
+    .btn:hover{border-color:#2e4256}
+    .btn.primary{background:linear-gradient(180deg,#1f9fb1,#197f8e);border-color:#266b76}
+    .btn.ghost{background:transparent;border:1px dashed #2a3a4e}
+    .footer{opacity:.75;font-size:12px;padding:18px;text-align:center}
+    details{margin-top:10px}
+    summary{cursor:pointer;color:#c9e9ee}
+    @media (max-width:900px){
+      .toolbar{grid-template-columns:1fr 1fr 1fr;}
+      .toolbar .hide-sm{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand"><span class="dot" aria-hidden="true"></span><h1>Email Directory</h1></div>
+      <div class="muted">Self‑hosted previews • Shareable links</div>
+    </header>
+
+    <section class="panel">
+      <div class="toolbar">
+        <label class="field"><input type="search" id="q" placeholder="Search by name, campaign, category, tag… (e.g., Abandon Cart, Knitwear, VIP)" aria-label="Search" /></label>
+        <label class="field"><select id="brand"><option value="">All brands</option></select></label>
+        <label class="field"><select id="type"><option value="">All types</option><option>Marketing</option><option>Automation</option><option>Transactional</option></select></label>
+        <label class="field hide-sm"><select id="sort">
+          <option value="date_desc">Newest first</option>
+          <option value="date_asc">Oldest first</option>
+          <option value="name_asc">Name A→Z</option>
+        </select></label>
+      </div>
+      <div id="grid" class="grid" aria-live="polite"></div>
+    </section>
+
+    <section class="footer">
+      <details>
+        <summary>How to add new emails</summary>
+        <ol>
+          <li>Export your email HTML (from Emarsys preview → HTML) and save it inside <code>/emails/</code>.</li>
+          <li>Update the <code>EMAILS</code> array inside this file with a new object pointing to your HTML file.
+            Use the naming convention fields to keep things tidy.</li>
+          <li>Commit & push. GitHub Pages will serve each file and this index instantly.</li>
+        </ol>
+        <div class="code">{
+  id: "Marketing_20250924_FullDB_Sale_SitewideSale",
+  brand: "Gazman",
+  type: "Marketing", // Marketing | Automation | Transactional
+  date: "2025-09-24", // YYYY-MM-DD
+  category: ["Sale","Menswear"],
+  tags: ["FullDB","Sitewide","VIP"],
+  path: "emails/Marketing_20250924_FullDB_Sale_SitewideSale.html",
+  notes: "V2 hero - 10% token"
+}</div>
+      </details>
+    </section>
+  </div>
+
+  <script>
+    // === SAMPLE DATA — replace/add as needed ===
+    const EMAILS = [
+      {
+        id: "Marketing_20250922_FullDB_Sale_SitewideSale",
+        brand: "House",
+        type: "Marketing",
+        date: "2025-09-22",
+        category: ["Sale","Kitchenware"],
+        tags: ["FullDB","Sitewide"],
+        path: "emails/Marketing_20250922_FullDB_Sale_SitewideSale.html",
+        notes: "HDR banner + 3x promo tiles"
+      },
+      {
+        id: "Auto_AbandonCart_VariantA",
+        brand: "Bessemer",
+        type: "Automation",
+        date: "2025-09-10",
+        category: ["AbandonCart"],
+        tags: ["Flow","VariantA","Reminder1"],
+        path: "emails/Auto_AbandonCart_VariantA.html",
+        notes: "Dynamic product block via Scarab"
+      },
+      {
+        id: "Marketing_20250918_Engaged_BAU_NewArrivals",
+        brand: "Viktoria & Woods",
+        type: "Marketing",
+        date: "2025-09-18",
+        category: ["New Arrivals","Apparel"],
+        tags: ["Engaged","Womenswear"],
+        path: "emails/Marketing_20250918_Engaged_BAU_NewArrivals.html",
+        notes: "Story tile + editorial section"
+      },
+      {
+        id: "Auto_Welcome_Email1",
+        brand: "Therapy Shoes",
+        type: "Automation",
+        date: "2025-08-30",
+        category: ["Welcome"],
+        tags: ["Step1","Voucher"],
+        path: "emails/Auto_Welcome_Email1.html",
+        notes: "Voucher block, predictive recs"
+      }
+    ];
+
+    // === Init filters ===
+    const brandSelect = document.getElementById('brand');
+    const brands = Array.from(new Set(EMAILS.map(e=>e.brand))).sort();
+    brands.forEach(b=>{ const o=document.createElement('option'); o.textContent=b; o.value=b; brandSelect.appendChild(o); });
+
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const typeSel = document.getElementById('type');
+    const sortSel = document.getElementById('sort');
+
+    function formatDate(iso){
+      const d = new Date(iso+"T00:00:00Z");
+      return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+    }
+
+    function copyToClipboard(text){
+      navigator.clipboard.writeText(text).then(()=>{
+        alert('Link copied to clipboard');
+      }).catch(()=>{});
+    }
+
+    function render(){
+      const query = q.value.trim().toLowerCase();
+      const brand = brandSelect.value;
+      const type = typeSel.value;
+      const sort = sortSel.value;
+
+      let rows = EMAILS.filter(e=>{
+        const inBrand = !brand || e.brand===brand;
+        const inType = !type || e.type===type;
+        const hay = [e.id, e.brand, e.type, e.category?.join(' '), e.tags?.join(' '), e.notes].join(' ').toLowerCase();
+        const inQuery = !query || hay.includes(query);
+        return inBrand && inType && inQuery;
+      });
+
+      rows.sort((a,b)=>{
+        if(sort==='name_asc') return a.id.localeCompare(b.id);
+        if(sort==='date_asc') return a.date.localeCompare(b.date);
+        return b.date.localeCompare(a.date);
+      });
+
+      grid.innerHTML = '';
+      if(rows.length===0){
+        const empty = document.createElement('div');
+        empty.className='card';
+        empty.innerHTML = '<div class="muted">No emails match your filters yet. Add items to the EMAILS array.</div>';
+        grid.appendChild(empty);
+        return;
+      }
+
+      rows.forEach(e=>{
+        const card = document.createElement('article');
+        card.className='card';
+        card.innerHTML = `
+          <div class="row">
+            <div style="font-weight:700">${e.id.replaceAll('_',' ')}</div>
+            <div class="badge" title="${e.type}">${e.type}</div>
+          </div>
+          <div class="meta">
+            <span class="badge" title="Brand">${e.brand}</span>
+            <span class="badge" title="Date">${formatDate(e.date)}</span>
+            ${ (e.category||[]).map(c=>`<span class="badge">${c}</span>`).join('') }
+            ${ (e.tags||[]).map(t=>`<span class="badge">#${t}</span>`).join('') }
+          </div>
+          <div class="code">${e.path}</div>
+          <div class="actions">
+            <a class="btn primary" href="${e.path}" target="_blank" rel="noopener">View</a>
+            <button class="btn" onclick="copyToClipboard(location.origin + location.pathname.replace(/index\.html?$/,'') + '${e.path}')">Copy link</button>
+            <a class="btn ghost" href="${e.path}" download>Download HTML</a>
+          </div>
+          ${ e.notes ? `<div class="muted" style="font-size:12px">${e.notes}</div>` : '' }
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    q.addEventListener('input', render);
+    brandSelect.addEventListener('change', render);
+    typeSel.addEventListener('change', render);
+    sortSel.addEventListener('change', render);
+
+    render();
+  </script>
+</body>
+</html>
