@@ -1,26 +1,41 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- 
+  =============================================================
+  EMAIL DIRECTORY — SIMPLE, SAFE-TO-EDIT INDEX (for non-coders)
+  =============================================================
+  How this file works (one page, no build tools):
+  • You paste/export each email HTML into /emails/ as its own .html file.
+  • You list those files in the “EMAILS” section below (clearly labelled EDIT HERE).
+  • This page renders a searchable directory of those files.
+
+  SAFE-EDIT RULES:
+  1) Only edit inside blocks that say  >>> EDIT HERE <<<  (labels included).
+  2) Don’t delete or rename any lines outside those blocks.
+  3) When adding a new email, duplicate an example object and change texts between quotes only.
+  4) Filenames must match the actual file inside /emails/ or the button will open 404.
+  5) If you make a mistake, the page won’t break; the entry will simply be skipped and you’ll see a warning card.
+
+  FOLDERS REQUIRED IN YOUR REPO:
+  /index.html   (this file)
+  /emails/      (put your exported email .html files here)
+
+  NAMING SUGGESTION (not required but tidy):
+  Marketing_YYYYMMDD_Segment_CampaignType_CampaignName[_Category][_Variant].html
+  Auto_FlowName[_Step][_Variant].html
+  =============================================================
+  -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Email Directory — Customr</title>
-  <meta name="description" content="Self‑hosted directory of email HTML files for live previews and sharing." />
+  <meta name="description" content="Self‑hosted directory of email HTML files for previews and sharing." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0b0c0f;/* near‑black */
-      --panel:#111319;/* card */
-      --muted:#a1a6b3;
-      --text:#e9eef9;
-      --brand:#5ad8e6;/* Customr aqua */
-      --ring:#4aa8b5;
-      --ok:#2ecc71;
-      --warn:#ffb020;
-      --bad:#ff5c5c;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
+    /* ====== VISUAL STYLES (do not edit unless you want to restyle) ====== */
+    :root{--bg:#0b0c0f;--panel:#111319;--muted:#a1a6b3;--text:#e9eef9;--brand:#5ad8e6;--ring:#4aa8b5;--mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0e1016 40%, #0b0c0f);color:var(--text)}
@@ -49,10 +64,7 @@
     .footer{opacity:.75;font-size:12px;padding:18px;text-align:center}
     details{margin-top:10px}
     summary{cursor:pointer;color:#c9e9ee}
-    @media (max-width:900px){
-      .toolbar{grid-template-columns:1fr 1fr 1fr;}
-      .toolbar .hide-sm{display:none}
-    }
+    @media (max-width:900px){.toolbar{grid-template-columns:1fr 1fr 1fr;}.toolbar .hide-sm{display:none}}
   </style>
 </head>
 <body>
@@ -62,11 +74,14 @@
       <div class="muted">Self‑hosted previews • Shareable links</div>
     </header>
 
-    <section class="panel">
+    <section class="panel" aria-labelledby="filters-heading">
+      <h2 id="filters-heading" class="visually-hidden" style="position:absolute;left:-9999px">Filters</h2>
       <div class="toolbar">
-        <label class="field"><input type="search" id="q" placeholder="Search by name, campaign, category, tag… (e.g., Abandon Cart, Knitwear, VIP)" aria-label="Search" /></label>
+        <!-- >>> EDIT HERE (optional placeholder): You may change the placeholder text only. -->
+        <label class="field"><input type="search" id="q" placeholder="Search… e.g., Abandon Cart, Knitwear, VIP" aria-label="Search" /></label>
+        <!-- No edits needed below unless you want to change option lists in BRANDS_PRESET or TYPES_PRESET. -->
         <label class="field"><select id="brand"><option value="">All brands</option></select></label>
-        <label class="field"><select id="type"><option value="">All types</option><option>Marketing</option><option>Automation</option><option>Transactional</option></select></label>
+        <label class="field"><select id="type"><option value="">All types</option></select></label>
         <label class="field hide-sm"><select id="sort">
           <option value="date_desc">Newest first</option>
           <option value="date_asc">Oldest first</option>
@@ -78,40 +93,54 @@
 
     <section class="footer">
       <details>
-        <summary>How to add new emails</summary>
+        <summary>How to add new emails (step‑by‑step)</summary>
         <ol>
-          <li>Export your email HTML (from Emarsys preview → HTML) and save it inside <code>/emails/</code>.</li>
-          <li>Update the <code>EMAILS</code> array inside this file with a new object pointing to your HTML file.
-            Use the naming convention fields to keep things tidy.</li>
-          <li>Commit & push. GitHub Pages will serve each file and this index instantly.</li>
+          <li>Export your email HTML from Emarsys preview → paste it into a new file inside <code>/emails/</code>. Example: <code>Marketing_20250924_FullDB_Sale_SitewideSale.html</code></li>
+          <li>Scroll to the <strong>EMAILS DATA – EDIT HERE</strong> block in the code below. Duplicate one object and change values between quotes only.</li>
+          <li>Fields meaning: <code>id</code> = display name, <code>brand</code> = brand filter, <code>type</code> = Marketing/Automation/Transactional, <code>date</code> = YYYY-MM-DD, <code>category</code> & <code>tags</code> = free text arrays, <code>path</code> = relative path to your HTML file, <code>notes</code> = small helper text.</li>
+          <li>Commit & push. Open this index in your repo (or GitHub Pages). Done.</li>
         </ol>
-        <div class="code">{
-  id: "Marketing_20250924_FullDB_Sale_SitewideSale",
-  brand: "Gazman",
-  type: "Marketing", // Marketing | Automation | Transactional
-  date: "2025-09-24", // YYYY-MM-DD
-  category: ["Sale","Menswear"],
-  tags: ["FullDB","Sitewide","VIP"],
-  path: "emails/Marketing_20250924_FullDB_Sale_SitewideSale.html",
-  notes: "V2 hero - 10% token"
-}</div>
       </details>
     </section>
   </div>
 
   <script>
-    // === SAMPLE DATA — replace/add as needed ===
+    // =============================================================
+    // PRESETS — EDIT SAFELY
+    // You can add or rename brands/types here. Keep quotes and commas.
+    // If you don't want presets, leave as-is; brands also auto-populate from EMAILS.
+    // =============================================================
+
+    /* >>> BRANDS PRESET — EDIT HERE (optional) <<< */
+    const BRANDS_PRESET = [
+      "House", "MyHouse", "Robin's Kitchen", "Bessemer", "Gazman",
+      "Perri Cutten", "Viktoria & Woods", "Therapy Shoes", "Cable Melbourne"
+    ];
+
+    /* >>> TYPES PRESET — EDIT HERE (optional) <<< */
+    const TYPES_PRESET = ["Marketing", "Automation", "Transactional"];
+
+    // =============================================================
+    // EMAILS DATA — EDIT HERE
+    // Add a new block by copying one of the examples and changing values.
+    // Rules: keep quotes, commas, and the overall { } shape. Don't remove keys.
+    // If something is wrong, the entry is skipped and a warning appears.
+    // =============================================================
+
     const EMAILS = [
+      // EXAMPLE 1 — Marketing
       {
-        id: "Marketing_20250922_FullDB_Sale_SitewideSale",
-        brand: "House",
-        type: "Marketing",
-        date: "2025-09-22",
-        category: ["Sale","Kitchenware"],
-        tags: ["FullDB","Sitewide"],
-        path: "emails/Marketing_20250922_FullDB_Sale_SitewideSale.html",
-        notes: "HDR banner + 3x promo tiles"
+        id: "Marketing_20250922_FullDB_Sale_SitewideSale",   // display name
+        brand: "House",                                       // must match a brand name
+        type: "Marketing",                                    // Marketing | Automation | Transactional
+        date: "2025-09-22",                                   // YYYY-MM-DD
+        category: ["Sale","Kitchenware"],                    // free tags; optional but useful
+        tags: ["FullDB","Sitewide"],                        // free tags; optional but useful
+        path: "emails/Marketing_20250922_FullDB_Sale_SitewideSale.html", // where the HTML file lives
+        notes: "HDR banner + 3x promo tiles"                   // small helper text; optional
       },
+
+      // EXAMPLE 2 — Automation (Abandon Cart)
       {
         id: "Auto_AbandonCart_VariantA",
         brand: "Bessemer",
@@ -122,6 +151,8 @@
         path: "emails/Auto_AbandonCart_VariantA.html",
         notes: "Dynamic product block via Scarab"
       },
+
+      // EXAMPLE 3 — Marketing (New Arrivals)
       {
         id: "Marketing_20250918_Engaged_BAU_NewArrivals",
         brand: "Viktoria & Woods",
@@ -132,6 +163,8 @@
         path: "emails/Marketing_20250918_Engaged_BAU_NewArrivals.html",
         notes: "Story tile + editorial section"
       },
+
+      // EXAMPLE 4 — Automation (Welcome)
       {
         id: "Auto_Welcome_Email1",
         brand: "Therapy Shoes",
@@ -144,37 +177,75 @@
       }
     ];
 
-    // === Init filters ===
-    const brandSelect = document.getElementById('brand');
-    const brands = Array.from(new Set(EMAILS.map(e=>e.brand))).sort();
-    brands.forEach(b=>{ const o=document.createElement('option'); o.textContent=b; o.value=b; brandSelect.appendChild(o); });
+    // =============================================================
+    // BELOW THIS LINE — LOGIC (DO NOT EDIT)
+    // Renders cards, handles filters, sorts, and basic validation.
+    // =============================================================
 
     const grid = document.getElementById('grid');
     const q = document.getElementById('q');
+    const brandSelect = document.getElementById('brand');
     const typeSel = document.getElementById('type');
     const sortSel = document.getElementById('sort');
 
+    // Build brand options: presets + detected from EMAILS
+    const detectedBrands = Array.from(new Set(EMAILS.map(e=>e.brand).filter(Boolean)));
+    const brands = Array.from(new Set([...(BRANDS_PRESET||[]), ...detectedBrands])).sort();
+    brands.forEach(b=>{ const o=document.createElement('option'); o.textContent=b; o.value=b; brandSelect.appendChild(o); });
+
+    // Build type options: presets or fallback
+    const detectedTypes = Array.from(new Set(EMAILS.map(e=>e.type).filter(Boolean)));
+    const types = Array.from(new Set([...(TYPES_PRESET||["Marketing","Automation","Transactional"]), ...detectedTypes])).sort();
+    types.forEach(t=>{ const o=document.createElement('option'); o.textContent=t; o.value=t; typeSel.appendChild(o); });
+
     function formatDate(iso){
+      if(!iso) return "";
       const d = new Date(iso+"T00:00:00Z");
-      return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
+      return isNaN(d) ? iso : d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'2-digit'});
     }
 
     function copyToClipboard(text){
-      navigator.clipboard.writeText(text).then(()=>{
-        alert('Link copied to clipboard');
-      }).catch(()=>{});
+      navigator.clipboard.writeText(text).then(()=>{ alert('Link copied to clipboard'); }).catch(()=>{});
+    }
+
+    function validate(entry){
+      // Minimal checks; if something is wrong we return a message and skip rendering as normal.
+      const errors = [];
+      if(!entry || typeof entry!== 'object') errors.push('Entry is not an object');
+      if(!entry.id) errors.push('Missing id');
+      if(!entry.brand) errors.push('Missing brand');
+      if(!entry.type) errors.push('Missing type');
+      if(!entry.date) errors.push('Missing date');
+      if(!entry.path) errors.push('Missing path');
+      return errors;
+    }
+
+    function warningCard(msg){
+      const card = document.createElement('article');
+      card.className='card';
+      card.innerHTML = `<div class="row"><strong>Warning</strong><span class="badge">Invalid item</span></div><div class="muted">${msg}</div>`;
+      return card;
     }
 
     function render(){
-      const query = q.value.trim().toLowerCase();
+      const query = (q.value||'').trim().toLowerCase();
       const brand = brandSelect.value;
       const type = typeSel.value;
       const sort = sortSel.value;
 
-      let rows = EMAILS.filter(e=>{
+      let rows = EMAILS.slice();
+      // Filter invalid items gracefully
+      const validated = [];
+      rows.forEach((e,i)=>{
+        const errs = validate(e);
+        if(errs.length){ grid.appendChild(warningCard(`Item #${i+1}: ${errs.join(', ')}`)); }
+        else { validated.push(e); }
+      });
+
+      rows = validated.filter(e=>{
         const inBrand = !brand || e.brand===brand;
         const inType = !type || e.type===type;
-        const hay = [e.id, e.brand, e.type, e.category?.join(' '), e.tags?.join(' '), e.notes].join(' ').toLowerCase();
+        const hay = [e.id, e.brand, e.type, (e.category||[]).join(' '), (e.tags||[]).join(' '), e.notes||''].join(' ').toLowerCase();
         const inQuery = !query || hay.includes(query);
         return inBrand && inType && inQuery;
       });
@@ -189,7 +260,7 @@
       if(rows.length===0){
         const empty = document.createElement('div');
         empty.className='card';
-        empty.innerHTML = '<div class="muted">No emails match your filters yet. Add items to the EMAILS array.</div>';
+        empty.innerHTML = '<div class="muted">No emails match your filters yet. Add items to the EMAILS block (look for \u00bb EMAILS DATA — EDIT HERE \u00ab).</div>';
         grid.appendChild(empty);
         return;
       }
@@ -197,9 +268,11 @@
       rows.forEach(e=>{
         const card = document.createElement('article');
         card.className='card';
+        const safeId = (e.id||'').replaceAll('_',' ');
+        const safePath = e.path;
         card.innerHTML = `
           <div class="row">
-            <div style="font-weight:700">${e.id.replaceAll('_',' ')}</div>
+            <div style="font-weight:700">${safeId}</div>
             <div class="badge" title="${e.type}">${e.type}</div>
           </div>
           <div class="meta">
@@ -208,11 +281,11 @@
             ${ (e.category||[]).map(c=>`<span class="badge">${c}</span>`).join('') }
             ${ (e.tags||[]).map(t=>`<span class="badge">#${t}</span>`).join('') }
           </div>
-          <div class="code">${e.path}</div>
+          <div class="code">${safePath}</div>
           <div class="actions">
-            <a class="btn primary" href="${e.path}" target="_blank" rel="noopener">View</a>
-            <button class="btn" onclick="copyToClipboard(location.origin + location.pathname.replace(/index\.html?$/,'') + '${e.path}')">Copy link</button>
-            <a class="btn ghost" href="${e.path}" download>Download HTML</a>
+            <a class="btn primary" href="${safePath}" target="_blank" rel="noopener">View</a>
+            <button class="btn" onclick="copyToClipboard(location.origin + location.pathname.replace(/index\\.html?$/,'') + '${safePath}')">Copy link</button>
+            <a class="btn ghost" href="${safePath}" download>Download HTML</a>
           </div>
           ${ e.notes ? `<div class="muted" style="font-size:12px">${e.notes}</div>` : '' }
         `;
